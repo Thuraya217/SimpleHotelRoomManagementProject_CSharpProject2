@@ -172,12 +172,51 @@
             // Find The Highest Paying Guest
             static void FindTheHighestPayingGuest()
             {
+                double maxAmount = 0;
+                string highestPayingGuest = "";
 
+                for (int i = 0; i < roomCount; i++)
+                {
+                    if (isReserved[i])
+                    {
+                        double totalCost = nights[i] * RoomRates[i];
+                        if (totalCost > maxAmount)
+                        {
+                            maxAmount = totalCost;
+                            highestPayingGuest = GuestNames[i];
+                        }
+                    }
+                }
+
+                if (string.IsNullOrEmpty(highestPayingGuest))
+                {
+                    Console.WriteLine("No reservations to check.");
+                }
+                else
+                {
+                    Console.WriteLine($"Highest paying guest: {highestPayingGuest} with total cost of {maxAmount}");
+                }
             }
             // Cancel A Reservation By Room Number
             static void CancelAReservationByRoomNumber()
             {
-                
+                Console.Write("Enter room number to cancel reservation: ");
+                int roomNumber = int.Parse(Console.ReadLine());
+
+                int roomIndex = Array.IndexOf(RoomNumbers, roomNumber);
+                if (roomIndex == -1 || !isReserved[roomIndex])
+                {
+                    Console.WriteLine("Room is either invalid or not reserved.");
+                    return;
+                }
+
+                // Cancel reservation
+                isReserved[roomIndex] = false;
+                GuestNames[roomIndex] = "";
+                nights[roomIndex] = 0;
+                bookingDates[roomIndex] = DateTime.MinValue;
+
+                Console.WriteLine("Reservation cancelled successfully.");
             }
         }
     }
